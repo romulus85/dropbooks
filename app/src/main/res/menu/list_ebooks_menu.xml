@@ -1,0 +1,42 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.booxs.app.MainActivity">
+
+    <item
+        android:id="@+id/action_see_as"
+        android:title="@string/action_see_as"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/action_see_list"
+                android:orderInCategory="100"
+                android:title="@string/action_see_list"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_see_grid"
+                android:orderInCategory="100"
+                android:title="@string/action_see_grid"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_see_order"
+        android:title="@string/action_see_order"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/action_order_name"
+                android:orderInCategory="100"
+                android:title="@string/action_order_name"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_order_date"
+                android:orderInCategory="100"
+                android:title="@string/action_order_date"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+</menu>

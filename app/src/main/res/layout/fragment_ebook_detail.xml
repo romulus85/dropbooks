@@ -1,0 +1,19 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context="com.booxs.app.EbookDetailFragment">
+
+    <ImageView
+        android:scaleType="fitStart"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/IvDetailCover" />
+
+    <TextView
+        android:id="@+id/TvDetailTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

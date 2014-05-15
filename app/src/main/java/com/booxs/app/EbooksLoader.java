@@ -42,6 +42,7 @@ public class EbooksLoader extends AsyncTaskLoader<EbookContent> {
 //                this should only be used for display purposes (such as sorting) and not,
 //                for example, to determine if a file has changed or not.
                     EbookContent.EbookItem item = new EbookContent.EbookItem(id.toString(), ebook.fileName());
+                    item.path = ebook.path;
                     //parse dropbox date string to date
                     //TODO add to a dropbox utils class
                     SimpleDateFormat formatoDelTexto = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss +S");

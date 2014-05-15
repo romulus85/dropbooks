@@ -61,6 +61,7 @@ public class MainActivity extends Activity implements EbookFragment.OnFragmentIn
     @Override
     public void onFragmentInteraction(String id) {
         Log.d(TAG, "onFragmentInteraction " + id);
+
     }
 
     @Override

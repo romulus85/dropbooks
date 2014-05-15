@@ -252,6 +252,22 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        // Create new fragment and transaction
+        Fragment newFragment = new EbookDetailFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Bundle args = new Bundle();
+        args.putParcelable(EbookDetailFragment.ARG_EBOOK, mBookList.get(position));
+        newFragment.setArguments(args);
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack
+        transaction.replace(R.id.container, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.

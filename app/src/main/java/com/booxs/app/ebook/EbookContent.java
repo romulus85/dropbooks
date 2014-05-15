@@ -1,5 +1,8 @@
 package com.booxs.app.ebook;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.booxs.app.EbookFragment;
 
 import java.util.ArrayList;
@@ -74,11 +77,12 @@ public class EbookContent {
     /**
      * A ebook item to store everything related to a book
      */
-    public static class EbookItem {
+    public static class EbookItem implements Parcelable {
         public String id;
         public String title;
         public String file_name;
         public long creation_time;
+        public String path;
 
         public EbookItem(String id, String file_name) {
             this.id = id;
@@ -88,6 +92,28 @@ public class EbookContent {
         @Override
         public String toString() {
             return file_name;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(id);
+            parcel.writeString(title);
+            parcel.writeString(file_name);
+            parcel.writeLong(creation_time);
+            parcel.writeString(path);
+        }
+
+        private EbookItem(Parcel in) {
+            id = in.readString();
+            title = in.readString();
+            file_name = in.readString();
+            creation_time = in.readLong();
+            path = in.readString();
         }
     }
 }

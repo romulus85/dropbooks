@@ -26,11 +26,6 @@ import com.booxs.app.ebook.EbookContent;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -49,12 +44,12 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
     private EbookContent mBookList;
     private EbooksLoader mEbooksLoader;
 
-    enum showAsEnum {
+    public enum showAsEnum {
         SHOW_AS_LIST,
         SHOW_AS_GRID
     }
 
-    enum orderByEnum {
+    public enum orderByEnum {
         ORDER_BY_DATE,
         ORDER_BY_NAME
     }
@@ -163,10 +158,9 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
         changePreference(ORDER_BY_PREF, orderByEnum.ORDER_BY_DATE.ordinal());
 
         //sort by date and reload adapter
-        List<EbookContent.EbookItem> booksList = new ArrayList<EbookContent.EbookItem>(mBookList.getAllItems());
-        Collections.sort(booksList, EbookContent.orderDateComparator);
+        mBookList.setOrder(orderByEnum.ORDER_BY_DATE);
         mAdapter = new ArrayAdapter<EbookContent.EbookItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, booksList);
+                android.R.layout.simple_list_item_1, android.R.id.text1, mBookList.getAllItems());
         mListView.setAdapter(mAdapter);
     }
 
@@ -174,10 +168,9 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
         changePreference(ORDER_BY_PREF, orderByEnum.ORDER_BY_NAME.ordinal());
 
         //sort by name and reload adapter
-        List<EbookContent.EbookItem> booksList = new ArrayList<EbookContent.EbookItem>(mBookList.getAllItems());
-        Collections.sort(booksList, EbookContent.orderNameComparator);
+        mBookList.setOrder(orderByEnum.ORDER_BY_NAME);
         mAdapter = new ArrayAdapter<EbookContent.EbookItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, booksList);
+                android.R.layout.simple_list_item_1, android.R.id.text1, mBookList.getAllItems());
         mListView.setAdapter(mAdapter);
     }
 
@@ -291,23 +284,20 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
         switch (ebookContentLoader.getId()) {
             case LOADER_ID:
                 mBookList = ebookContent;
-                List<EbookContent.EbookItem> booksList = new ArrayList<EbookContent.EbookItem>(mBookList.getAllItems());
                 //default order
-                Comparator<EbookContent.EbookItem> comparator = EbookContent.orderNameComparator;
+                orderByEnum order = orderByEnum.ORDER_BY_NAME;
+                //get current order from preferences
                 if (getActivity() != null) {
                     SharedPreferences pref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                    orderByEnum order_by = orderByEnum.values()[
+                    order = orderByEnum.values()[
                             pref.getInt(ORDER_BY_PREF, orderByEnum.ORDER_BY_NAME.ordinal())];
-                    if (order_by == orderByEnum.ORDER_BY_DATE)
-                        comparator = EbookContent.orderDateComparator;
                 }
-                Collections.sort(booksList, comparator);
-                Log.d(TAG, "booksList = " + booksList);
+                mBookList.setOrder(order);
                 // The asynchronous load is complete and the data
                 // is now available for use. Only now can we associate
                 // the queried Cursor with the SimpleCursorAdapter.
                 mAdapter = new ArrayAdapter<EbookContent.EbookItem>(getActivity(),
-                        android.R.layout.simple_list_item_1, android.R.id.text1, booksList);
+                        android.R.layout.simple_list_item_1, android.R.id.text1, mBookList.getAllItems());
                 mListView.setAdapter(mAdapter);
                 break;
         }

@@ -1,5 +1,7 @@
 package com.booxs.app.ebook;
 
+import com.booxs.app.EbookFragment;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,29 +18,22 @@ import java.util.Map;
 public class EbookContent {
 
     /**
-     * An array of sample items.
+     * An array of ebook items.
      */
     public List<EbookItem> ITEMS = new ArrayList<EbookItem>();
 
     /**
-     * A map of sample items, by ID.
+     * A map of ebook items, by ID.
      */
     public Map<String, EbookItem> ITEM_MAP = new HashMap<String, EbookItem>();
-
-//    static {
-//        // Add 4 sample items.
-//        addItem(new EbookItem("1", "Item 1"));
-//        addItem(new EbookItem("2", "Item 2"));
-//        addItem(new EbookItem("3", "Item 3"));
-//        addItem(new EbookItem("4", "Item 4"));
-//    }
+    private EbookFragment.orderByEnum order;
 
     public void addItem(EbookItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    public static Comparator<EbookItem> orderDateComparator = new Comparator<EbookItem>() {
+    private static Comparator<EbookItem> orderDateComparator = new Comparator<EbookItem>() {
         @Override
         public int compare(EbookContent.EbookItem ebookItem, EbookContent.EbookItem ebookItem2) {
             if (ebookItem.creation_time > ebookItem2.creation_time)
@@ -50,7 +45,7 @@ public class EbookContent {
         }
     };
 
-    public static Comparator<EbookItem> orderNameComparator = new Comparator<EbookContent.EbookItem>() {
+    private static Comparator<EbookItem> orderNameComparator = new Comparator<EbookContent.EbookItem>() {
         @Override
         public int compare(EbookContent.EbookItem ebookItem, EbookContent.EbookItem ebookItem2) {
             return ebookItem.file_name.compareToIgnoreCase(ebookItem2.file_name);
@@ -63,6 +58,17 @@ public class EbookContent {
 
     public EbookItem get(int position) {
         return ITEMS.get(position);
+    }
+
+    public void setOrder(EbookFragment.orderByEnum order) {
+        if (order != this.order) {
+            if (order == EbookFragment.orderByEnum.ORDER_BY_DATE)
+                Collections.sort(ITEMS, orderDateComparator);
+            else
+                Collections.sort(ITEMS, orderNameComparator);
+        }
+        this.order = order;
+
     }
 
     /**

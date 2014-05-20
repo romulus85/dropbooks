@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Fran on 14/05/2014.
@@ -45,7 +46,7 @@ public class EbooksLoader extends AsyncTaskLoader<EbookContent> {
                     item.path = ebook.path;
                     //parse dropbox date string to date
                     //TODO add to a dropbox utils class
-                    SimpleDateFormat formatoDelTexto = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss +S");
+                    SimpleDateFormat formatoDelTexto = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
                     String strFecha = ebook.clientMtime;
                     Date fecha = null;
                     try {

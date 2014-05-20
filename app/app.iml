@@ -78,7 +78,6 @@
     <orderEntry type="library" exported="" name="json_simple-1.1" level="project" />
     <orderEntry type="library" exported="" name="dropbox-android-sdk-1.6.1" level="project" />
     <orderEntry type="library" exported="" name="bcprov-jdk16-146" level="project" />
-    <orderEntry type="library" exported="" name="slf4j-log4j12-1.7.7" level="project" />
     <orderEntry type="library" exported="" name="epublib-core" level="project" />
     <orderEntry type="library" exported="" name="commons-logging-1.1.1" level="project" />
   </component>

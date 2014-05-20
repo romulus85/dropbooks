@@ -20,11 +20,10 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.booxs.app.ebook.EbookContent;
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
 
 /**
  * A fragment representing a list of Items.
@@ -32,8 +31,6 @@ import com.dropbox.client2.android.AndroidAuthSession;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
  */
 public class EbookFragment extends Fragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<EbookContent> {
 
@@ -43,6 +40,7 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
     public static final String SHOW_AS_PREF = "showAs";
     private EbookContent mBookList;
     private EbooksLoader mEbooksLoader;
+    private ProgressBar pb;
 
     public enum showAsEnum {
         SHOW_AS_LIST,
@@ -62,8 +60,6 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
 
     /**
      * The fragment's ListView/GridView.
@@ -91,7 +87,9 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true);
+        //with option menu different from activity and other fragments
         setHasOptionsMenu(true);
 
         mBookList = new EbookContent();
@@ -110,6 +108,8 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
         if (lm != null) {
             lm.initLoader(LOADER_ID, null, this).forceLoad();
         }
+        pb = (ProgressBar) getActivity().findViewById(R.id.progressBar);
+        pb.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -235,20 +235,8 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        activity.getActionBar().setTitle(R.string.title_activity_main);
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -263,16 +251,10 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack
         transaction.replace(R.id.container, newFragment);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("EbookFragment");
 
         // Commit the transaction
         transaction.commit();
-
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(mBookList.get(position).id);
-        }
     }
 
     /**
@@ -290,7 +272,7 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
 
     @Override
     public Loader<EbookContent> onCreateLoader(int i, Bundle bundle) {
-        mEbooksLoader = new EbooksLoader(getActivity(), mListener.getDropboxApi());
+        mEbooksLoader = new EbooksLoader(getActivity(), LoginActivity.mDBApi);
         return mEbooksLoader;
     }
 
@@ -315,6 +297,7 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
                 mAdapter = new ArrayAdapter<EbookContent.EbookItem>(getActivity(),
                         android.R.layout.simple_list_item_1, android.R.id.text1, mBookList.getAllItems());
                 mListView.setAdapter(mAdapter);
+                pb.setVisibility(View.INVISIBLE);
                 break;
         }
     }
@@ -322,18 +305,6 @@ public class EbookFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onLoaderReset(Loader<EbookContent> loader) {
         mListView.setAdapter(null);
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
-
-        public DropboxAPI<AndroidAuthSession> getDropboxApi();
     }
 
 }

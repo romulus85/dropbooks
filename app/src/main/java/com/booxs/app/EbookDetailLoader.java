@@ -27,11 +27,11 @@ public class EbookDetailLoader extends AsyncTaskLoader<File> {
         super(context);
         mDBApi = db_api;
         mEbook = ebook;
-        localFile = new File(context.getFilesDir(), mEbook.file_name);
     }
 
     @Override
     public File loadInBackground() {
+        localFile = new File(getContext().getFilesDir(), mEbook.file_name);
         try {
             downloadDropboxFile();
             return localFile;
@@ -49,6 +49,9 @@ public class EbookDetailLoader extends AsyncTaskLoader<File> {
         try {
             if (!localFile.exists()) {
                 localFile.createNewFile(); //otherwise dropbox client will fail silently
+            } else {
+                //when the file already exist then return true and use the already downloaded
+                return true;
             }
 
             DropboxAPI.DropboxInputStream fd = mDBApi.getFileStream(mEbook.path, null);

@@ -8,5 +8,6 @@
     <string name="action_see_order">Order by…</string>
     <string name="action_order_name">Order by name</string>
     <string name="action_order_date">Order by date</string>
+    <string name="title_activity_main">Ebook List</string>
 
 </resources>
